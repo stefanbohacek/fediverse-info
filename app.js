@@ -15,9 +15,6 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.use('/', indexRoute)
-app.use('/node-info', nodeInfoRoute)
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -25,5 +22,8 @@ app.use((req, res, next) => {
   // res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
+
+app.use('/', indexRoute)
+app.use('/node-info', nodeInfoRoute)
 
 export default app;
