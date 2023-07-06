@@ -3,6 +3,7 @@ import compression from 'compression';
 import bodyParser from 'body-parser';
 import indexRoute from './routes/index.js';
 import nodeInfoRoute from './routes/node-info.js';
+import postContextRoute from './routes/post-context.js';
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use((req, res, next) => {
 
 app.use('/', indexRoute)
 app.use('/node-info', nodeInfoRoute)
+app.use('/post-context', postContextRoute)
 
 export default app;
