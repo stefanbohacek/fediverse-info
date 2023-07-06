@@ -1,5 +1,5 @@
 const getStatusContext = async (statusURL) => {
-  let results = [];
+  let results = {};
 
   try {
     const url = new URL(statusURL)
