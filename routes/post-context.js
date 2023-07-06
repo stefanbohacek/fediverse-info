@@ -6,7 +6,7 @@ import getStatusContext from '../modules/getStatusContext.js';
 import NodeCache from 'node-cache';
 
 const router = express.Router();
-const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
+const appCache = new NodeCache( { stdTTL: 5, checkperiod: 1 } );
 
 router.get('/', async (req, res) => {
   if (req.query.url){
