@@ -1,58 +1,29 @@
-import express from 'express';
-import rejectRequest from '../modules/rejectRequest.js';
-import NodeCache from 'node-cache';
+import fs from "fs";
+import express from "express";
+import rejectRequest from "../modules/rejectRequest.js";
+import getNodeInfo from "../modules/getNodeInfo.js";
+
+const fediverseSoftwareData = JSON.parse(
+  fs.readFileSync("./data/software.json")
+);
 
 const router = express.Router();
-const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
 
-router.get('/', async (req, res) => {
-  if (req.query.domain){
-    const domain = req.query.domain;
+router.get("/", async (req, res) => {
+  if (req.query.domain) {
+    let nodeInfo;
 
-    let nodeInfoURL, nodeInfo = {
-      domain
-    };
-
-    const cacheKey = `nodeinfo:${domain}${req.query.full ? ':full' : ''}`;
-
-    const cachedData = appCache.get(cacheKey);
-
-    if (cachedData == undefined){
-      try{
-        const resp = await fetch(`https://${domain}/.well-known/nodeinfo`);
-        let results = await resp.json();
-        if (results.links){
-          results.links.forEach(link => {
-            if (link.rel.includes('nodeinfo.diaspora.software/ns/schema')){
-              nodeInfoURL = link.href;
-            }
-          });
-        }
-
-        if (nodeInfoURL){
-          const resp = await fetch(nodeInfoURL);
-          let results = await resp.json();
-    
-          if (req.query.full){
-            nodeInfo.nodeInfo = results;
-          } else {
-            nodeInfo.software = {
-              name: results?.software?.name,
-              version: results?.software?.version,
-            }
-          }
-        }        
-        const success = appCache.set(cacheKey, nodeInfo);
-      } catch(err){
-        console.log('node-info error', err);
+    if (req.query.onlysoftware) {
+      if (fediverseSoftwareData[req.query.domain]) {
+        nodeInfo = fediverseSoftwareData[req.query.domain];
+      } else {
+        nodeInfo = await getNodeInfo(req.query.domain, req.query.full);
       }
-  
-
     } else {
-      nodeInfo = cachedData;
+      nodeInfo = await getNodeInfo(req.query.domain, req.query.full);
     }
-  
-    res.json(nodeInfo)
+
+    res.json(nodeInfo);
   } else {
     rejectRequest(req, res, 422);
   }

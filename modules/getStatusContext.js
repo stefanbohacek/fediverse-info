@@ -1,4 +1,4 @@
-const getStatusContext = async (statusURL) => {
+export default async (statusURL) => {
   let results = {};
 
   try {
@@ -21,6 +21,4 @@ const getStatusContext = async (statusURL) => {
     return results;
   }
 
-}
-
-export default getStatusContext;
+};

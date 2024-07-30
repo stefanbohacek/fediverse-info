@@ -1,4 +1,4 @@
-const fetchStatus = async (instance, url) => {
+export default async (instance, url) => {
   let results = {};
   try {
       const resp = await fetch(`https://${instance}/authorize_interaction?uri=${url}`);
@@ -9,6 +9,4 @@ const fetchStatus = async (instance, url) => {
       console.log(error);
       return results;
   }
-}
-
-export default fetchStatus;
+};

@@ -1,4 +1,4 @@
-const getOriginalPostURL = async (url) => {
+export default async (url) => {
   let returnURL = url;
   let urlObject = new URL(url);
   const domain = urlObject.hostname;
@@ -14,6 +14,4 @@ const getOriginalPostURL = async (url) => {
   }
 
   return returnURL;
-}
-
-export default getOriginalPostURL;
+};
