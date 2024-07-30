@@ -15,7 +15,12 @@ router.get("/", async (req, res) => {
 
     if (req.query.onlysoftware) {
       if (fediverseSoftwareData[req.query.domain]) {
-        nodeInfo = fediverseSoftwareData[req.query.domain];
+        nodeInfo = {
+          domain: req.query.domain,
+          software: {
+            name: fediverseSoftwareData[req.query.domain]["software"],
+          },
+        };
       } else {
         nodeInfo = await getNodeInfo(req.query.domain, req.query.full);
       }
