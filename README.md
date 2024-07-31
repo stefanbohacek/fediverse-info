@@ -18,7 +18,10 @@ Response:
 }
 ```
 
-Optionally you can also pass the `full=true` parameter to get the full node info object.
+Additional optional parameters
+
+- `full=true`: get the full node info object
+- `onlysoftware=true`: look up the software name only using data exported from [demo.fedilist.com](http://demo.fedilist.com/) (see the `data/software.json` file)
 
 ## Development
 
