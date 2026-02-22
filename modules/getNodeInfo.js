@@ -1,5 +1,5 @@
-import NodeCache from 'node-cache';
-const appCache = new NodeCache( { stdTTL: 100, checkperiod: 60 } );
+import NodeCache from "node-cache";
+const appCache = new NodeCache({ stdTTL: 100, checkperiod: 60 });
 
 export default async (domain, full) => {
   let nodeInfoURL,
@@ -29,6 +29,26 @@ export default async (domain, full) => {
 
           if (full) {
             nodeInfo.nodeInfo = results;
+
+            try {
+              const instanceData = await fetch(
+                `https://${domain}/api/v2/instance`,
+              );
+              const instanceDataJSON = await instanceData.json();
+
+              if (instanceDataJSON && instanceDataJSON.domain) {
+                nodeInfo.instance_data = {
+                  thumbnail_url: instanceDataJSON?.thumbnail?.url,
+                  icon_url: instanceDataJSON?.icon[0]?.src,
+                  contact_name:
+                    instanceDataJSON?.contact?.account?.display_name,
+                  contact_username:
+                    instanceDataJSON?.contact?.account?.username,
+                };
+              }
+            } catch (error) {
+              // noop
+            }
           } else {
             nodeInfo.software = {
               name: results?.software?.name,
